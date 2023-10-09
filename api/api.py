@@ -1,5 +1,5 @@
 import json
-from typing import List
+from typing import List, Set
 
 from fastapi import FastAPI
 
@@ -9,7 +9,7 @@ app = FastAPI()
 
 
 @app.get("/status", description="Get the status of the API")
-def get_status() -> Status:
+async def get_status() -> Status:
     return Status(status="ok")
 
 
@@ -18,13 +18,21 @@ def get_status() -> Status:
     description="Get available countries",
     response_description="List of available countries",
 )
-def get_available_countries() -> List[str]:
+async def get_available_countries() -> Set[str]:
     with open("data/world_countries.geojson", "r") as file:
         geojson = json.loads(file.read())
         assert geojson["type"] == "FeatureCollection"
-        return sorted([c["properties"]["ADMIN"] for c in geojson["features"]])
+        return set(sorted([c["properties"]["ADMIN"] for c in geojson["features"]]))
 
 
-@app.get("/pick", description="Get some picks to guess an image")
-def get_image_picks(q: PicksRequest) -> PicksResponse:
-    raise NotImplementedError
+@app.post(
+    "/pick",
+    description="Get some picks to guess an image",
+    response_model=PicksResponse,
+    response_description="A set of picks",
+)
+async def get_image_picks(q: PicksRequest) -> PicksResponse:
+    # TODO: generate prettymaps image and picks
+    return PicksResponse(
+        request=q, image_url=f"{q.country}-{q.preset}", picks=[], correct_pick_index=1
+    )

@@ -8,12 +8,9 @@ class Status(BaseModel):
 
 
 class PicksRequest(BaseModel):
-    country: Optional[str]
+    country: str | None = "random"
     nb_picks: int
-
-
-class PrettymapsImage(BaseModel):
-    url: str
+    preset: str | None = "random"
 
 
 class Pick(BaseModel):
