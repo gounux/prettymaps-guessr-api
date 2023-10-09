@@ -41,3 +41,19 @@ def test_picks_response_ok(country: str, nb_picks: int, preset: str):
     assert json["request"]["country"] == country
     assert json["request"]["nb_picks"] == nb_picks
     assert json["request"]["preset"] == preset
+
+
+@pytest.mark.parametrize(
+    "country,nb_picks,preset",
+    [
+        ("Belgium", 1, "minimal"),
+        ("Belgium", 5, "minimal"),
+        ("Belgium", 3, "abcdefg"),
+    ],
+)
+def test_picks_wrong_parameters(country: str, nb_picks: int, preset: str):
+    response: Response = client.post(
+        "/pick", json={"country": country, "nb_picks": nb_picks, "preset": preset}
+    )
+    # FIXME: status code should not be ok (validators not applied)
+    assert response.status_code == 420
