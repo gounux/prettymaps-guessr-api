@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, Dict, List
 
 from pydantic import BaseModel
 from pydantic.v1 import Field, validator
@@ -17,9 +17,9 @@ class Status(BaseModel):
 
 
 class PicksRequest(BaseModel):
-    country: str | None = Field(default="random")
+    country: str = Field(default="random")
     nb_picks: int = Field(default=3, ge=2, le=4)
-    preset: str | None = Field(default="random")
+    preset: str = Field(default="random")
 
     # FIXME: the validators are not applied
     @validator("nb_picks")
@@ -40,6 +40,8 @@ class PicksRequest(BaseModel):
 
 class Pick(BaseModel):
     name: str
+    osm_display_name: str
+    osm_address: Dict[str, Any]
 
 
 class PicksResponse(BaseModel):
