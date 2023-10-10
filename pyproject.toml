@@ -13,6 +13,7 @@ uvicorn = {extras = ["standard"], version = "^0.23.2"}
 prettymaps = "^1.0.0"
 shapely = "^1.8.5"
 httpx = "^0.25.0"
+colorlog = "^6.7.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.4.0"
